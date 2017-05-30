@@ -20,7 +20,6 @@ public class Example {
 
 	private void example() {
 		Connector connector = new Connector();
-
 		connector.prepare();
 
 		/**
@@ -56,11 +55,10 @@ public class Example {
 		 * NOTE in an [Invoice] [Invoice.originCountry] is the country where the invoice was generated. [Invoice.destinationCountry] is the cars [Car.countryOfOrigin].
 		 */
 
-		Car car = new Car(String.format("testcar"), Countries.NETHERLANDS, false);
+		Car car = new Car("testcar", Countries.NETHERLANDS, false);
 		connector.publishCar(car);
 
 		Invoice newInvoice = new Invoice(500.0, 100.0, "test", Countries.NETHERLANDS, Countries.UNITED_KINGDOM, Date.from(Instant.now()));
-
 		connector.publishInvoice(newInvoice);
 	}
 
