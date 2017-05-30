@@ -21,14 +21,14 @@ fun main(args: Array<String>) {
      */
     connector.subscribeToQueue(
             country = Countries.NETHERLANDS,
-            type = Car::class,
+            type = Car::class.java,
             handler = { message ->
                 println(message)
             }
     )
     connector.subscribeToQueue(
             country = Countries.NETHERLANDS,
-            type = Invoice::class,
+            type = Invoice::class.java,
             handler = { message ->
                 println(message)
             }

@@ -122,8 +122,8 @@ class Connector(usernameToUse: String = defaultUsername, passwordToUse: String =
     fun subscribeToQueue(country: Countries, type: Any, handler: (message: String) -> Unit) {
         var queueName = "$country"
         when (type) {
-            Car::class -> queueName += carSuffix
-            Invoice::class -> queueName += invoiceSuffix
+            Car::class.java -> queueName += carSuffix
+            Invoice::class.java -> queueName += invoiceSuffix
         }
         subscribe(
                 queueName = queueName,
