@@ -1,3 +1,4 @@
+package com.gmail.guushamm.EuropeanIntegration
 /**
  * Created by guushamm on 23-5-17.
  */
@@ -12,6 +13,8 @@ val defaultVirtualHost = "europe"
 
 val carSuffix = "CarChannel"
 val invoiceSuffix = "InvoiceChannel"
+val stolenCarSuffix = "StolenCarChannel"
 
 val carExchangeName = "cars"
 val invoiceExchangeName = "invoice"
+val stolenCarExchangeName = "stolenCar"

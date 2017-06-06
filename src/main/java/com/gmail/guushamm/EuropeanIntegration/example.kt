@@ -1,3 +1,5 @@
+package com.gmail.guushamm.EuropeanIntegration
+
 import java.util.*
 
 /**
@@ -33,6 +35,13 @@ fun main(args: Array<String>) {
                 println(message)
             }
     )
+    connector.subscribeToQueue(
+            country = Countries.NETHERLANDS,
+            type = StolenCar::class.java,
+            handler = { message ->
+                println(message)
+            }
+    )
 
     /**
      * Publish some data to test everything is working.
@@ -50,5 +59,9 @@ fun main(args: Array<String>) {
             originCountry = Countries.UNITED_KINGDOM,
             destinationCountry = Countries.NETHERLANDS,
             date = Date())
+    )
+    connector.publishStolenCar(StolenCar(
+            licensePlate = "dank-kush-man",
+            countryOfOrigin = Countries.NETHERLANDS)
     )
 }

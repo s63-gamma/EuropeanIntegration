@@ -1,3 +1,5 @@
+package com.gmail.guushamm.EuropeanIntegration;
+
 import com.google.gson.Gson;
 
 import java.time.Instant;
@@ -11,10 +13,12 @@ public class Example {
 	private ArrayList<Car> cars;
 	private ArrayList<Invoice> invoices;
 	private Gson gson;
+	private ArrayList<StolenCar> stolencars;
 
 	public Example() {
 		this.cars = new ArrayList<>();
 		this.invoices = new ArrayList<>();
+		this.stolencars = new ArrayList<>();
 		this.gson = new Gson();
 	}
 
@@ -38,7 +42,7 @@ public class Example {
 				}
 		);
 		connector.subscribeToQueue(
-				Countries.NETHERLANDS,
+				Countries.UNITED_KINGDOM,
 				Invoice.class,
 				(String message) -> {
 					Invoice invoice = gson.fromJson(message, Invoice.class);
@@ -49,6 +53,17 @@ public class Example {
 				}
 		);
 
+		connector.subscribeToQueue(
+				Countries.NETHERLANDS,
+				StolenCar.class,
+				(String message) -> {
+					StolenCar stolenCar = gson.fromJson(message, StolenCar.class);
+					processStolenCar(stolenCar);
+
+					// Lambdas in java always have to have a return value
+					return null;
+				}
+		);
 
 		/**
 		 * Publish some data to test everything is working.
@@ -58,8 +73,11 @@ public class Example {
 		Car car = new Car("testcar", Countries.NETHERLANDS, false);
 		connector.publishCar(car);
 
-		Invoice newInvoice = new Invoice(500.0, 100.0, "test", Countries.NETHERLANDS, Countries.UNITED_KINGDOM, Date.from(Instant.now()));
-		connector.publishInvoice(newInvoice);
+		Invoice invoice = new Invoice(500.0, 100.0, "test", Countries.UNITED_KINGDOM, Countries.UNITED_KINGDOM, Date.from(Instant.now()));
+		connector.publishInvoice(invoice);
+
+		StolenCar stolenCar = new StolenCar("noot-noot-nooooot", Countries.NETHERLANDS, true);
+		connector.publishStolenCar(stolenCar);
 	}
 
 	private void processCar(Car car) {
@@ -78,6 +96,15 @@ public class Example {
 
 		this.invoices.add(invoice);
 		System.out.println(String.format("Received new invoice: %s", invoice));
+	}
+
+	private void processStolenCar(StolenCar stolenCar) {
+		/**
+		 * Do something with your stolen car
+		 */
+
+		this.stolencars.add(stolenCar);
+		System.out.println(String.format("Stolen car reported: %s", stolenCar));
 	}
 
 

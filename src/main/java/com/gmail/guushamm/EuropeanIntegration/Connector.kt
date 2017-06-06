@@ -1,3 +1,5 @@
+package com.gmail.guushamm.EuropeanIntegration
+
 import com.google.gson.Gson
 import com.rabbitmq.client.*
 import java.time.Instant
@@ -59,6 +61,23 @@ class Connector(usernameToUse: String = defaultUsername, passwordToUse: String =
     }
 
     /**
+     * Sends a [StolenCar] to the JMS.
+     *
+     * The [StolenCar] gets serialized using GSON this should be compatible with other JSON implementations though errors could occur.
+     * Uses the [Car.countryOfOrigin] property as the routing key. Thus delivering the car to the proper queue and country.
+     *
+     * @param stolenCar The stolen car that has to be send.
+     */
+    fun publishStolenCar(stolenCar: StolenCar) {
+        try {
+            val serializedCar: String = gson.toJson(stolenCar)
+            channel.basicPublish(stolenCarExchangeName, "", null, serializedCar.toByteArray())
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
      * Handles all the configuration of the JMS.
      *
      * In theory this should only need to be executed once. But should be called on application startup in case of a crash of the JMS.
@@ -84,6 +103,14 @@ class Connector(usernameToUse: String = defaultUsername, passwordToUse: String =
             channel.queueDeclare(queueName, true, false, false, null)
             channel.queueBind(queueName, invoiceExchangeName, country.toString())
         }
+
+        channel.exchangeDeclare(stolenCarExchangeName, "fanout", true)
+        Countries.values().forEach { country ->
+            val queueName = "$country$stolenCarSuffix"
+            channel.queueDeclare(queueName, true, false, false, null)
+            channel.queueBind(queueName, stolenCarExchangeName, "")
+        }
+
     }
 
     /**
@@ -124,6 +151,7 @@ class Connector(usernameToUse: String = defaultUsername, passwordToUse: String =
         when (type) {
             Car::class.java -> queueName += carSuffix
             Invoice::class.java -> queueName += invoiceSuffix
+            StolenCar::class.java -> queueName += stolenCarSuffix
         }
         subscribe(
                 queueName = queueName,
