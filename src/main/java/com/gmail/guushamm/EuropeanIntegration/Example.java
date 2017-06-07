@@ -67,13 +67,13 @@ public class Example {
 
 		/**
 		 * Publish some data to test everything is working.
-		 * NOTE in an [Invoice] [Invoice.originCountry] is the country where the invoice was generated. [Invoice.destinationCountry] is the cars [Car.countryOfOrigin].
+		 * NOTE in an [Invoice] [Invoice.originCountry] is the country where the invoice was generated. [Invoice.destinationCountry] is the cars [Car.destinationCountry].
 		 */
 
-		Car car = new Car("testcar", Countries.NETHERLANDS, false);
+		Car car = new Car("testcar", Countries.NETHERLANDS, Countries.UNITED_KINGDOM, false);
 		connector.publishCar(car);
 
-		Invoice invoice = new Invoice(500.0, 100.0, "test", Countries.UNITED_KINGDOM, Countries.UNITED_KINGDOM, Date.from(Instant.now()));
+		Invoice invoice = new Invoice(500.0, 100.0, "test", Countries.NETHERLANDS, Countries.UNITED_KINGDOM, Date.from(Instant.now()));
 		connector.publishInvoice(invoice);
 
 		StolenCar stolenCar = new StolenCar("noot-noot-nooooot", Countries.NETHERLANDS, true);

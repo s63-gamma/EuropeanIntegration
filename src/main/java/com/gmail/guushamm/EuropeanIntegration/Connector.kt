@@ -30,14 +30,14 @@ class Connector(usernameToUse: String = defaultUsername, passwordToUse: String =
      * Sends a [Car] to the JMS.
      *
      * The [Car] gets serialized using GSON this should be compatible with other JSON implementations though errors could occur.
-     * Uses the [Car.countryOfOrigin] property as the routing key. Thus delivering the car to the proper queue and country.
+     * Uses the [Car.destinationCountry] property as the routing key. Thus delivering the car to the proper queue and country.
      *
      * @param car The car that has to be send.
      */
     fun publishCar(car: Car) {
         try {
             val serializedCar: String = gson.toJson(car)
-            channel.basicPublish(carExchangeName, car.countryOfOrigin.toString(), null, serializedCar.toByteArray())
+            channel.basicPublish(carExchangeName, car.destinationCountry.toString(), null, serializedCar.toByteArray())
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -64,7 +64,7 @@ class Connector(usernameToUse: String = defaultUsername, passwordToUse: String =
      * Sends a [StolenCar] to the JMS.
      *
      * The [StolenCar] gets serialized using GSON this should be compatible with other JSON implementations though errors could occur.
-     * Uses the [Car.countryOfOrigin] property as the routing key. Thus delivering the car to the proper queue and country.
+     * Uses the [Car.destinationCountry] property as the routing key. Thus delivering the car to the proper queue and country.
      *
      * @param stolenCar The stolen car that has to be send.
      */

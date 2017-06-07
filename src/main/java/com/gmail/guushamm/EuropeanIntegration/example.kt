@@ -45,11 +45,12 @@ fun main(args: Array<String>) {
 
     /**
      * Publish some data to test everything is working.
-     * NOTE in an [Invoice] [Invoice.originCountry] is the country where the invoice was generated. [Invoice.destinationCountry] is the cars [Car.countryOfOrigin].
+     * NOTE in an [Invoice] [Invoice.originCountry] is the country where the invoice was generated. [Invoice.destinationCountry] is the cars [Car.destinationCountry].
      */
     connector.publishCar(Car(
             licensePlate = "test",
-            countryOfOrigin = Countries.NETHERLANDS,
+            originCountry = Countries.UNITED_KINGDOM,
+            destinationCountry = Countries.NETHERLANDS,
             stolen = false)
     )
     connector.publishInvoice(Invoice(
